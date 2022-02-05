@@ -1,6 +1,3 @@
-import { WebSocketClient } from "../deps.ts";
-
-
 export type SlotConfig = {
   guid: string
   username: string,
@@ -19,13 +16,11 @@ export class WebSocketSlot {
   readonly config: Record<string, unknown>
 
   constructor(
-    public readonly ws: WebSocketClient,
+    public readonly ws: WebSocket,
     slotConfig: SlotConfig
   ) {
     this.userList.add(slotConfig.username)
     this.guid = slotConfig.guid
     this.config = slotConfig.config || {}
   }
-
-
 }
