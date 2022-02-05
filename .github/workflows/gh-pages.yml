@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-20.04
     defaults:
       run:
-        working_directory: ./front
+        working-directory: ./front
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
