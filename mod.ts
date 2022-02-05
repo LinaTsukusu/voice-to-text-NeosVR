@@ -3,6 +3,7 @@ import { SlotCommand, SlotConfig, WebSocketSlot } from "./lib/WebSocketSlot.ts";
 
 
 const slots: Map<string, WebSocketSlot> = new Map()
+
 serve(async (req: Request): Promise<Response> => {
   const upgrade = req.headers.get("upgrade") || ""
   if (upgrade.toLowerCase() === "websocket") {
@@ -28,15 +29,22 @@ serve(async (req: Request): Promise<Response> => {
             socket.close()
             slots.delete(command.guid)
             break
+          case "addUser":
+            slots.get(command.guid)?.userList.add(command.username!)
+            break
+          case "deleteUser":
+            slots.get(command.guid)?.userList.delete(command.username!)
+            break
         }
-    }
+      }
     }
     socket.onerror = (e) => console.log("socket errored:", e)
     socket.onclose = () => console.log("socket closed")
+    
     return response
   }
   
-  const { pathname } = new URL(req.url)
+  const { pathname, search } = new URL(req.url)
   if (pathname.startsWith("/send")) {
     const body = await req.json()
     if (body.username) {
@@ -51,5 +59,14 @@ serve(async (req: Request): Promise<Response> => {
       return new Response("sended", { status: 200 })
     }
   }
-  return Response.redirect("https://linatsukusu.github.io/voice-to-text-NeosVR" + pathname, 303)
+  return Response.redirect(`https://linatsukusu.github.io/voice-to-text-NeosVR${pathname}${search}`, 303)
 })
+
+setInterval(() => {
+  slots.forEach((v, k, m) => {
+    const state = v.ws.readyState
+    if (state === WebSocket.CLOSING || state === WebSocket.CLOSED) {
+      m.delete(k)
+    }
+  })
+}, 60000)

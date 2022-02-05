@@ -7,6 +7,7 @@ export type SlotConfig = {
 export type SlotCommand = {
   guid: string
   command: string
+  username?: string
 }
 
 
