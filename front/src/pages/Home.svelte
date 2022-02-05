@@ -1,7 +1,7 @@
 <script lang="ts">
   import BrowserAlert from "../lib/BrowserAlert.svelte"
   
-  const username = new URL(window.location.href).searchParams.get("username")
+  let username = new URL(window.location.href).searchParams.get("username")
 
   let text = ""
   let language = "ja-JP"
@@ -23,6 +23,16 @@
       speech.stop()
       if (e.results[0].isFinal) {
         text = e.results[0][0].transcript
+        fetch("https://voice-to-text-neosvr.deno.dev/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+            text: text,
+          })
+        })
       }
     }
 
