@@ -46,6 +46,7 @@ serve(async (req: Request): Promise<Response> => {
   
   const { pathname, search } = new URL(req.url)
   if (pathname.startsWith("/send")) {
+    console.log(req)
     const body = await req.json()
     if (body.username) {
       slots.forEach((v) => {
