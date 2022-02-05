@@ -51,6 +51,7 @@ serve(async (req: Request): Promise<Response> => {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Headers": "Origin, Accept, Content-Type"
         },
         status: 204,
       })
