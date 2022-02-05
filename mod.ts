@@ -46,6 +46,15 @@ serve(async (req: Request): Promise<Response> => {
   
   const { pathname, search } = new URL(req.url)
   if (pathname.startsWith("/send")) {
+    if (req.method === "OPTIONS") {
+      return new Response(null, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST",
+        },
+        status: 204,
+      })
+    }
     console.log(req)
     const body = await req.json()
     if (body.username) {
@@ -57,7 +66,7 @@ serve(async (req: Request): Promise<Response> => {
           }))
         }
       })
-      return new Response(JSON.stringify({status: "ok"}), { status: 200, headers: { "Access-Control-Allow-Origin": "*" } })
+      return new Response(JSON.stringify({status: "ok"}), { status: 200, })
     }
   }
   return Response.redirect(`https://linatsukusu.github.io/voice-to-text-NeosVR${pathname}${search}`, 303)
