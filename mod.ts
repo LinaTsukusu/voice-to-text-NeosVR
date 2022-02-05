@@ -44,15 +44,16 @@ serve(async (req: Request): Promise<Response> => {
     return response
   }
   
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST",
+    "Access-Control-Allow-Headers": "Origin, Accept, Content-Type"
+  }
   const { pathname, search } = new URL(req.url)
   if (pathname.startsWith("/send")) {
     if (req.method === "OPTIONS") {
       return new Response(null, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST",
-          "Access-Control-Allow-Headers": "Origin, Accept, Content-Type"
-        },
+        headers: headers,
         status: 204,
       })
     }
@@ -67,7 +68,7 @@ serve(async (req: Request): Promise<Response> => {
           }))
         }
       })
-      return new Response(JSON.stringify({status: "ok"}), { status: 200, })
+      return new Response(JSON.stringify({status: "ok"}), { status: 200, headers: headers})
     }
   }
   return Response.redirect(`https://linatsukusu.github.io/voice-to-text-NeosVR${pathname}${search}`, 303)
