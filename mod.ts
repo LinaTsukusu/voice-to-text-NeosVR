@@ -56,7 +56,7 @@ serve(async (req: Request): Promise<Response> => {
           }))
         }
       })
-      return new Response("sended", { status: 200 })
+      return new Response(JSON.stringify({status: "ok"}), { status: 200, headers: { "Access-Control-Allow-Origin": "*" } })
     }
   }
   return Response.redirect(`https://linatsukusu.github.io/voice-to-text-NeosVR${pathname}${search}`, 303)
